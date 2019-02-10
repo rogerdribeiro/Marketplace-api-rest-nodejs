@@ -9,10 +9,13 @@ class PurchaseController {
     const purchases = await Purchase.find()
     return res.json(purchases)
   }
+
   async store (req, res) {
     const { ad, content } = req.body
 
     const purchaseAd = await Ad.findById(ad).populate('author')
+    if (!purchaseAd) return res.json({ error: 'Esse anuncio não existe' })
+
     const user = await User.findById(req.userId)
 
     const purchase = await Purchase.create({
